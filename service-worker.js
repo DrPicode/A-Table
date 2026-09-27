@@ -1,4 +1,4 @@
-const CACHE_NAME = 'a-table-v14';
+const CACHE_NAME = 'a-table-v15';
 const APP_VERSION = CACHE_NAME.replace('a-table-', '');
 const APP_FILES = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './icon.svg'];
 
