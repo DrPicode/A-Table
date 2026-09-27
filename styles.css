@@ -931,6 +931,24 @@ h2 {
   border-color: #91ae92;
 }
 
+.add-item-controls select {
+  min-width: 0;
+  flex: 0 0 auto;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid #dce2d6;
+  border-radius: 3px;
+  outline: 0;
+  background: #fffefa;
+  color: var(--ink);
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.add-item-controls select:focus {
+  border-color: #91ae92;
+}
+
 .add-item-controls button {
   padding: 0 14px;
   border: 0;

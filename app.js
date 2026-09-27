@@ -211,7 +211,8 @@ function buildShoppingItems() {
   }
   for (const item of state.custom) {
     const id = `custom-${item.id}`;
-    items.set(id, { id, name: item.name, department: 'epicerie', sources: ['Ajouté à la main'], quantities: [], custom: true });
+    const department = DEPARTMENTS.some(({ id: departmentId }) => departmentId === item.department) ? item.department : 'epicerie';
+    items.set(id, { id, name: item.name, department, sources: ['Ajouté à la main'], quantities: [], custom: true });
   }
   return [...items.values()];
 }
@@ -513,12 +514,17 @@ document.querySelector('#shopping-groups').addEventListener('keydown', (event) =
 
 document.querySelectorAll('[data-go-plats]').forEach((button) => button.addEventListener('click', () => setView('plats')));
 
+document.querySelector('#add-item-department').innerHTML = DEPARTMENTS.map(({ id, label, icon }) => `
+  <option value="${id}">${icon} ${escapeHTML(label)}</option>
+`).join('');
+
 document.querySelector('#add-item-form').addEventListener('submit', (event) => {
   event.preventDefault();
   const input = document.querySelector('#add-item');
+  const departmentSelect = document.querySelector('#add-item-department');
   const name = input.value.trim();
   if (!name) return;
-  state.custom.push({ id: `${Date.now()}-${Math.random().toString(16).slice(2, 7)}`, name });
+  state.custom.push({ id: `${Date.now()}-${Math.random().toString(16).slice(2, 7)}`, name, department: departmentSelect.value });
   input.value = '';
   renderShoppingList();
   saveState();

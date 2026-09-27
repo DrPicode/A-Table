@@ -1,130 +1,155 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f6f7f1" />
-    <meta name="description" content="Choisissez vos plats de la semaine et retrouvez automatiquement votre liste de courses." />
-    <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="icon" href="icon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="icon.svg" />
-    <link rel="stylesheet" href="styles.css" />
-    <title>Ma semaine à table</title>
-  </head>
-  <body>
-    <div class="app-shell">
-      <header class="topbar">
-        <a class="brand" href="#plats" aria-label="Ma semaine à table, accueil">
-          <span class="brand-mark" aria-hidden="true">✳</span>
-          <span>à table <span class="brand-light">cette semaine</span></span>
-        </a>
-        <div class="topbar-right">
-          <span class="local-badge"><span class="live-dot"></span> Enregistré sur ce téléphone</span>
-          <button class="icon-button" id="reset-week" aria-label="Réinitialiser la semaine" title="Réinitialiser la semaine">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M9 6V4h6v2m4 0-.8 14H5.8L5 6m4 4v6m6-6v6" /></svg>
-          </button>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f7f1" />
+  <meta name="description"
+    content="Choisissez vos plats de la semaine et retrouvez automatiquement votre liste de courses." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Ma semaine à table</title>
+</head>
+
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#plats" aria-label="Ma semaine à table, accueil">
+        <span class="brand-mark" aria-hidden="true">✳</span>
+        <span>à table <span class="brand-light">cette semaine</span></span>
+      </a>
+      <div class="topbar-right">
+        <span class="local-badge"><span class="live-dot"></span> Enregistré sur ce téléphone</span>
+        <button class="icon-button" id="reset-week" aria-label="Réinitialiser la semaine"
+          title="Réinitialiser la semaine">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 6h18M9 6V4h6v2m4 0-.8 14H5.8L5 6m4 4v6m6-6v6" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> LE MENU, PUIS LES COURSES</p>
+          <h1 id="page-title">On mange quoi<br /><em>cette semaine&nbsp;?</em></h1>
+          <p class="intro-text">Choisis tes plats. Ta liste de courses se prépare toute seule.</p>
         </div>
-      </header>
+      </section>
 
-      <main>
-        <section class="intro" aria-labelledby="page-title">
-          <div class="intro-copy">
-            <p class="eyebrow"><span class="eyebrow-line"></span> LE MENU, PUIS LES COURSES</p>
-            <h1 id="page-title">On mange quoi<br /><em>cette semaine&nbsp;?</em></h1>
-            <p class="intro-text">Choisis tes plats. Ta liste de courses se prépare toute seule.</p>
-          </div>
-        </section>
+      <nav class="view-switch" aria-label="Navigation principale">
+        <button class="view-tab active" data-view="plats" aria-current="page"><span class="tab-number">01</span> Mes
+          plats <span class="tab-count" id="meal-count">0</span></button>
+        <button class="view-tab" data-view="courses"><span class="tab-number">02</span> Ma liste de courses <span
+            class="tab-count" id="ingredient-count">0</span></button>
+      </nav>
+      <div id="selection-action-row" class="selection-action-row hidden">
+        <span id="selection-summary">0 plat sélectionné</span>
+        <button id="clear-selection" class="clear-selection-button" type="button">Vider la sélection</button>
+      </div>
 
-        <nav class="view-switch" aria-label="Navigation principale">
-          <button class="view-tab active" data-view="plats" aria-current="page"><span class="tab-number">01</span> Mes plats <span class="tab-count" id="meal-count">0</span></button>
-          <button class="view-tab" data-view="courses"><span class="tab-number">02</span> Ma liste de courses <span class="tab-count" id="ingredient-count">0</span></button>
-        </nav>
-        <div id="selection-action-row" class="selection-action-row hidden">
-          <span id="selection-summary">0 plat sélectionné</span>
-          <button id="clear-selection" class="clear-selection-button" type="button">Vider la sélection</button>
-        </div>
-
-        <section id="view-plats" class="view-panel">
-          <div class="section-heading">
-            <div>
-              <p class="section-kicker">À LA CARTE</p>
-              <h2>Choisis tes recettes</h2>
-            </div>
-            <div class="recipe-tools">
-              <label class="search-box">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
-                <input id="search" type="search" placeholder="Chercher un plat…" autocomplete="off" />
-              </label>
-              <button class="primary-button" id="add-recipe" type="button"><span aria-hidden="true">＋</span> Ajouter un plat</button>
-            </div>
-          </div>
-          <div class="filter-row" id="category-filters" aria-label="Filtrer par catégorie"></div>
-          <div id="meal-groups" class="meal-groups"></div>
-          <div id="no-results" class="empty-state hidden">
-            <span class="empty-icon">⌕</span><strong>Aucun plat trouvé</strong><span>Essaie un autre nom ou change de catégorie.</span>
-          </div>
-          <div class="bottom-hint"><span class="hint-sparkle">✳</span> Tes choix sont gardés ici, même si tu fermes l’application.</div>
-        </section>
-
-        <section id="view-courses" class="view-panel hidden">
-          <div class="section-heading shopping-heading">
-            <div>
-              <p class="section-kicker">PRÊTE POUR LE MAGASIN</p>
-              <h2>Ta liste de courses</h2>
-              <p class="section-subtitle" id="shopping-summary">Sélectionne quelques plats pour commencer.</p>
-            </div>
-            <div class="progress-box">
-              <div class="progress-label"><span>Dans le panier</span><strong id="progress-count">0 / 0</strong></div>
-              <div class="progress-track"><span id="progress-bar"></span></div>
-            </div>
-          </div>
-          <div id="selected-meals" class="selected-meals"></div>
-          <div id="shopping-groups" class="shopping-groups"></div>
-          <div class="add-item-wrap">
-            <span class="add-plus" aria-hidden="true">＋</span>
-            <form id="add-item-form" class="add-item-form">
-              <label for="add-item">Il manque quelque chose&nbsp;?</label>
-              <div class="add-item-controls"><input id="add-item" type="text" maxlength="80" placeholder="Ajouter un article à la liste" /><button type="submit">Ajouter</button></div>
-            </form>
-          </div>
-          <div id="shopping-empty" class="empty-state hidden">
-            <span class="empty-icon">🧺</span><strong>La liste est encore vide</strong><span>Retourne aux plats et choisis ce que tu as envie de cuisiner.</span>
-            <button class="text-action" data-go-plats>Voir les plats <span aria-hidden="true">↗</span></button>
-          </div>
-          <p class="quantity-note"><span aria-hidden="true">✳</span> Les quantités indiquées viennent de tes recettes. Quand elles ne sont pas précisées, pense à les ajuster selon le nombre de personnes.</p>
-        </section>
-      </main>
-      <footer class="footer"><span>Fait pour les courses du dimanche <span aria-hidden="true">♡</span></span><span>Tout reste sur cet appareil</span></footer>
-    </div>
-    <dialog id="recipe-dialog" class="recipe-dialog" aria-labelledby="recipe-dialog-title">
-      <form id="recipe-form" class="recipe-form">
-        <header class="recipe-form-header">
+      <section id="view-plats" class="view-panel">
+        <div class="section-heading">
           <div>
-            <p class="section-kicker">TON CARNET DE RECETTES</p>
-            <h2 id="recipe-dialog-title">Ajouter un plat</h2>
+            <p class="section-kicker">À LA CARTE</p>
+            <h2>Choisis tes recettes</h2>
           </div>
-          <button class="icon-button dialog-close" id="close-recipe-dialog" type="button" aria-label="Fermer">×</button>
-        </header>
-        <input id="recipe-id" type="hidden" />
-        <div class="recipe-fields">
-          <label class="form-field form-field-wide">Nom du plat<input id="recipe-name" type="text" maxlength="70" required placeholder="Ex. Gratin de légumes" /></label>
-          <label class="form-field">Catégorie<select id="recipe-category" required></select></label>
-          <label class="form-field">Petit descriptif<input id="recipe-description" type="text" maxlength="90" placeholder="Ex. Facile et rapide" /></label>
-          <label class="form-field form-field-wide">Note de préparation <span class="optional-label">facultatif</span><textarea id="recipe-note" rows="2" maxlength="180" placeholder="Ex. Faire cuire le riz à part"></textarea></label>
+          <div class="recipe-tools">
+            <label class="search-box">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="10.8" cy="10.8" r="6.8" />
+                <path d="m16 16 5 5" />
+              </svg>
+              <input id="search" type="search" placeholder="Chercher un plat…" autocomplete="off" />
+            </label>
+            <button class="primary-button" id="add-recipe" type="button"><span aria-hidden="true">＋</span> Ajouter un
+              plat</button>
+          </div>
         </div>
-        <fieldset class="ingredient-editor">
-          <legend>Ingrédients <span class="optional-label">avec quantités si tu les connais</span></legend>
-          <div class="ingredient-editor-labels" aria-hidden="true"><span>Ingrédient</span><span>Quantité</span><span>Rayon</span><span></span></div>
-          <div id="ingredient-rows" class="ingredient-rows"></div>
-          <button class="add-ingredient-button" id="add-ingredient" type="button">＋ Ajouter un ingrédient</button>
-        </fieldset>
-        <footer class="recipe-form-actions">
-          <button class="secondary-button" id="cancel-recipe" type="button">Annuler</button>
-          <button class="primary-button" type="submit">Enregistrer le plat</button>
-        </footer>
-      </form>
-    </dialog>
-    <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <script src="app.js" defer></script>
-  </body>
+        <div class="filter-row" id="category-filters" aria-label="Filtrer par catégorie"></div>
+        <div id="meal-groups" class="meal-groups"></div>
+        <div id="no-results" class="empty-state hidden">
+          <span class="empty-icon">⌕</span><strong>Aucun plat trouvé</strong><span>Essaie un autre nom ou change de
+            catégorie.</span>
+        </div>
+        <div class="bottom-hint"><span class="hint-sparkle">✳</span> Tes choix sont gardés ici, même si tu fermes
+          l’application.</div>
+      </section>
+
+      <section id="view-courses" class="view-panel hidden">
+        <div class="section-heading shopping-heading">
+          <div>
+            <p class="section-kicker">PRÊTE POUR LE MAGASIN</p>
+            <h2>Ta liste de courses</h2>
+            <p class="section-subtitle" id="shopping-summary">Sélectionne quelques plats pour commencer.</p>
+          </div>
+          <div class="progress-box">
+            <div class="progress-label"><span>Dans le panier</span><strong id="progress-count">0 / 0</strong></div>
+            <div class="progress-track"><span id="progress-bar"></span></div>
+          </div>
+        </div>
+        <div id="selected-meals" class="selected-meals"></div>
+        <div id="shopping-groups" class="shopping-groups"></div>
+        <div class="add-item-wrap">
+          <span class="add-plus" aria-hidden="true">＋</span>
+          <form id="add-item-form" class="add-item-form">
+            <label for="add-item">Il manque quelque chose&nbsp;?</label>
+            <div class="add-item-controls"><input id="add-item" type="text" maxlength="80"
+                placeholder="Ajouter un article à la liste" /><select id="add-item-department"
+                aria-label="Rayon"></select><button type="submit">Ajouter</button></div>
+          </form>
+        </div>
+        <div id="shopping-empty" class="empty-state hidden">
+          <span class="empty-icon">🧺</span><strong>La liste est encore vide</strong><span>Retourne aux plats et choisis
+            ce que tu as envie de cuisiner.</span>
+          <button class="text-action" data-go-plats>Voir les plats <span aria-hidden="true">↗</span></button>
+        </div>
+        <p class="quantity-note"><span aria-hidden="true">✳</span> Les quantités indiquées viennent de tes recettes.
+          Quand elles ne sont pas précisées, pense à les ajuster selon le nombre de personnes.</p>
+      </section>
+    </main>
+    <footer class="footer"><span>Fait pour les courses du dimanche <span aria-hidden="true">♡</span></span><span>Tout
+        reste sur cet appareil</span></footer>
+  </div>
+  <dialog id="recipe-dialog" class="recipe-dialog" aria-labelledby="recipe-dialog-title">
+    <form id="recipe-form" class="recipe-form">
+      <header class="recipe-form-header">
+        <div>
+          <p class="section-kicker">TON CARNET DE RECETTES</p>
+          <h2 id="recipe-dialog-title">Ajouter un plat</h2>
+        </div>
+        <button class="icon-button dialog-close" id="close-recipe-dialog" type="button" aria-label="Fermer">×</button>
+      </header>
+      <input id="recipe-id" type="hidden" />
+      <div class="recipe-fields">
+        <label class="form-field form-field-wide">Nom du plat<input id="recipe-name" type="text" maxlength="70" required
+            placeholder="Ex. Gratin de légumes" /></label>
+        <label class="form-field">Catégorie<select id="recipe-category" required></select></label>
+        <label class="form-field">Petit descriptif<input id="recipe-description" type="text" maxlength="90"
+            placeholder="Ex. Facile et rapide" /></label>
+        <label class="form-field form-field-wide">Note de préparation <span
+            class="optional-label">facultatif</span><textarea id="recipe-note" rows="2" maxlength="180"
+            placeholder="Ex. Faire cuire le riz à part"></textarea></label>
+      </div>
+      <fieldset class="ingredient-editor">
+        <legend>Ingrédients <span class="optional-label">avec quantités si tu les connais</span></legend>
+        <div class="ingredient-editor-labels" aria-hidden="true">
+          <span>Ingrédient</span><span>Quantité</span><span>Rayon</span><span></span></div>
+        <div id="ingredient-rows" class="ingredient-rows"></div>
+        <button class="add-ingredient-button" id="add-ingredient" type="button">＋ Ajouter un ingrédient</button>
+      </fieldset>
+      <footer class="recipe-form-actions">
+        <button class="secondary-button" id="cancel-recipe" type="button">Annuler</button>
+        <button class="primary-button" type="submit">Enregistrer le plat</button>
+      </footer>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+
 </html>
