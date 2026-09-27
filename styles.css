@@ -185,6 +185,19 @@ h2 { margin: 0; font: 500 29px/1.2 var(--serif); letter-spacing: -.5px; }
 }
 @media (max-width: 620px) {
   body { font-size: 14px; }
+  .section-subtitle { font-size: 13px; }
+  .meal-description { font-size: 12px; }
+  .ingredient-tag { font-size: 11px; }
+  .meal-note { font-size: 11px; }
+  .item-detail { font-size: 11px; }
+  .progress-label { font-size: 11px; }
+  .progress-label strong { font-size: 12px; }
+  .selected-label { font-size: 11px; }
+  .meal-pill { font-size: 11px; }
+  .quantity-note { font-size: 11px; }
+  .meal-group-heading { font-size: 11px; }
+  .shopping-group-heading { font-size: 11px; }
+  .meal-card-actions button { font-size: 11px; }
   .app-shell { padding: 0 18px; }
   .topbar { height: 63px; }
   .brand { font-size: 14px; gap: 8px; }
@@ -196,11 +209,11 @@ h2 { margin: 0; font: 500 29px/1.2 var(--serif); letter-spacing: -.5px; }
   .intro { min-height: auto; padding: 23px 0 21px; }
   .eyebrow { margin-bottom: 11px; font-size: 8px; }
   h1 { font-size: clamp(38px, 10vw, 49px); }
-  .intro-text { max-width: 230px; font-size: 11px; }
+  .intro-text { max-width: 230px; font-size: 13px; }
   .view-switch { gap: 20px; height: 51px; }
-  .view-tab { gap: 7px; font-size: 10px; }
-  .tab-number { font-size: 9px; }
-  .tab-count { min-width: 18px; height: 18px; font-size: 9px; }
+  .view-tab { gap: 7px; font-size: 12px; }
+  .tab-number { font-size: 10px; }
+  .tab-count { min-width: 18px; height: 18px; font-size: 11px; }
   .view-panel { padding-top: 24px; }
   .section-heading { align-items: flex-start; flex-direction: column; gap: 14px; }
   h2 { font-size: 26px; }
@@ -208,23 +221,23 @@ h2 { margin: 0; font: 500 29px/1.2 var(--serif); letter-spacing: -.5px; }
   .search-box { width: auto; min-width: 0; height: 39px; flex: 1; }
   .recipe-tools > .primary-button { flex: 0 0 auto; min-height: 39px; padding: 0 10px; font-size: 9px; }
   .filter-row { gap: 6px; padding: 17px 0 17px; margin-right: -18px; padding-right: 18px; }
-  .filter-chip { padding: 7px 11px; font-size: 9px; }
+  .filter-chip { padding: 7px 11px; font-size: 11px; }
   .meal-groups { gap: 22px; }
   .meal-grid { grid-template-columns: 1fr; gap: 9px; }
   .meal-card { min-height: 0; padding: 15px; }
   .meal-name { font-size: 17px; }
   .meal-description { margin: 7px 0 10px; }
   .ingredient-preview { gap: 4px; }
-  .bottom-hint { margin-top: 23px; font-size: 9px; }
+  .bottom-hint { margin-top: 23px; font-size: 11px; }
   .shopping-heading { gap: 14px; }
   .progress-box { width: 100%; }
   .selected-meals { padding: 14px 0 16px; }
   .shopping-groups { grid-template-columns: 1fr; gap: 9px; }
   .shopping-group-heading { padding: 10px 12px; }
   .shopping-item { padding: 10px 12px; }
-  .item-name { font-size: 11px; }
+  .item-name { font-size: 13px; }
   .add-item-wrap { padding: 12px; }
-  .footer { font-size: 8px; }
+  .footer { font-size: 10px; }
   .recipe-form { padding: 19px 16px 15px; }
   .recipe-form-header { margin-bottom: 16px; }
   .recipe-fields { grid-template-columns: 1fr; gap: 10px; }
@@ -242,10 +255,10 @@ h2 { margin: 0; font: 500 29px/1.2 var(--serif); letter-spacing: -.5px; }
   .filter-row { margin-right: -16px; padding-right: 16px; }
   .local-badge { max-width: 8px; overflow: hidden; gap: 0; font-size: 0; }
   .view-switch { gap: clamp(10px, 4vw, 20px); }
-  .view-tab { gap: 5px; font-size: 9px; }
+  .view-tab { gap: 5px; font-size: 11px; }
   .tab-number { display: none; }
-  .recipe-tools > .primary-button { gap: 4px; padding: 0 8px; font-size: 8px; }
-  .selection-action-row { padding-top: 9px; font-size: 9px; }
+  .recipe-tools > .primary-button { gap: 4px; padding: 0 8px; font-size: 9px; }
+  .selection-action-row { padding-top: 9px; font-size: 11px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
