@@ -151,7 +151,7 @@ function renderFilters() {
   const choices = [
     { id: 'tout', label: 'Tout voir' },
     ...CATEGORIES.map(({ id, label }) => ({ id, label })),
-    { id: 'vegetarien', label: '<span class="veg-badge" aria-hidden="true">V</span> Végétarien' },
+    { id: 'vegetarien', label: '<span class="veg-badge" title="Sans viande" aria-label="Sans viande">V</span>' },
   ];
   document.querySelector('#category-filters').innerHTML = choices.map(({ id, label }) => `
     <button class="filter-chip ${activeCategory === id ? 'active' : ''}" data-category="${id}" aria-pressed="${activeCategory === id}">${label}</button>
