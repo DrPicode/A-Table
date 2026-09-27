@@ -570,6 +570,8 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
 function showAppVersion() {
   const el = document.querySelector('#app-version');
   if (!el) return;
+
+  // Dernier recours (hors-ligne, file://) : version figée du service worker.
   const fallback = () => fetch('./service-worker.js', { cache: 'no-store' })
     .then((response) => response.text())
     .then((text) => {
@@ -577,16 +579,19 @@ function showAppVersion() {
       if (match) el.textContent = match[1];
     })
     .catch(() => { });
-  if (!('serviceWorker' in navigator)) return void fallback();
-  navigator.serviceWorker.ready.then((registration) => {
-    const worker = registration.active;
-    if (!worker) return fallback();
-    const channel = new MessageChannel();
-    channel.port1.onmessage = (event) => {
-      if (event.data) el.textContent = event.data;
-    };
-    worker.postMessage('version', [channel.port2]);
-  }).catch(fallback);
+
+  // Version automatique : date de dernière modification réelle des fichiers déployés.
+  const trackedFiles = ['./index.html', './app.js', './styles.css', './service-worker.js'];
+  Promise.all(trackedFiles.map((file) => fetch(file, { method: 'HEAD', cache: 'no-store' })
+    .then((response) => response.headers.get('Last-Modified'))
+    .catch(() => null)))
+    .then((headers) => {
+      const times = headers.filter(Boolean).map((value) => new Date(value).getTime()).filter((time) => !Number.isNaN(time));
+      if (!times.length) return fallback();
+      const latest = new Date(Math.max(...times));
+      el.textContent = latest.toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+    })
+    .catch(fallback);
 }
 
 showAppVersion();

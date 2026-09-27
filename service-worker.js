@@ -1,4 +1,4 @@
-const CACHE_NAME = 'a-table-v16';
+const CACHE_NAME = 'a-table-v20';
 const APP_VERSION = CACHE_NAME.replace('a-table-', '');
 const APP_FILES = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './icon.svg'];
 
@@ -20,11 +20,8 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
-  event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
-    if (response.ok) {
-      const copy = response.clone();
-      caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-    }
+  event.respondWith(caches.open(CACHE_NAME).then((cache) => fetch(event.request).then((response) => {
+    if (response.ok) cache.put(event.request, response.clone());
     return response;
-  }).catch(() => caches.match('./index.html'))));
+  }).catch(() => cache.match(event.request).then((cached) => cached || cache.match('./index.html')))));
 });
