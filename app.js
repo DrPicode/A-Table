@@ -212,7 +212,7 @@ function buildShoppingItems() {
   for (const item of state.custom) {
     const id = `custom-${item.id}`;
     const department = DEPARTMENTS.some(({ id: departmentId }) => departmentId === item.department) ? item.department : 'epicerie';
-    items.set(id, { id, name: item.name, department, sources: ['Ajouté à la main'], quantities: [], custom: true });
+    items.set(id, { id, customId: item.id, name: item.name, department, sources: ['Ajouté à la main'], quantities: [], custom: true });
   }
   return [...items.values()];
 }
@@ -274,6 +274,7 @@ function renderShoppingItem(item) {
     <div class="shopping-item ${checked ? 'checked' : ''}" data-shopping-item="${escapeHTML(item.id)}" role="checkbox" aria-checked="${checked}" tabindex="0">
       <span class="item-check" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="m2 7.2 3.1 3L12 3.5"/></svg></span>
       <span class="item-copy"><span class="item-name">${escapeHTML(item.name)}</span><span class="item-detail">${escapeHTML(details.join(' · '))}</span></span>
+      ${item.custom ? `<button class="remove-shopping-item" type="button" data-remove-custom="${escapeHTML(item.customId)}" aria-label="Supprimer ${escapeHTML(item.name)}" title="Supprimer">×</button>` : ''}
     </div>`;
 }
 
@@ -316,6 +317,14 @@ function toggleShoppingItem(id) {
   else state.checked.add(id);
   renderShoppingList();
   saveState();
+}
+
+function removeCustomItem(customId) {
+  state.custom = state.custom.filter((item) => item.id !== customId);
+  state.checked.delete(`custom-${customId}`);
+  renderShoppingList();
+  saveState();
+  showToast('Article retiré de la liste');
 }
 
 function slugifyIngredient(value) {
@@ -501,6 +510,8 @@ document.querySelector('#selected-meals').addEventListener('click', (event) => {
 });
 
 document.querySelector('#shopping-groups').addEventListener('click', (event) => {
+  const removeButton = event.target.closest('[data-remove-custom]');
+  if (removeButton) return removeCustomItem(removeButton.dataset.removeCustom);
   const row = event.target.closest('[data-shopping-item]');
   if (row) toggleShoppingItem(row.dataset.shoppingItem);
 });
