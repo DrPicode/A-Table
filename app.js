@@ -18,7 +18,7 @@ const DEFAULT_RECIPES = [
     id: 'taboule', name: 'Taboulé', category: 'salades', description: 'Frais, coloré et prêt à partager',
     ingredients: [
       ['semoule', 'Semoule', '500 g', 'epicerie'], ['gaspacho', 'Gaspacho', '1 L', 'frais'],
-      ['tomates-cerises', 'Tomates cerises', '1 barquette', 'fruits'], ['poivrons-oignons', 'Mélange poivrons & oignons', '1 sachet', 'surgeles'],
+      ['tomates-cerises', 'Tomates cerises', '1 barquette', 'fruits'], ['poivrons-oignons', 'Mélange poivrons & oignons', '1 sachet', 'fruits'],
       ['emmental', 'Emmental', '1', 'frais'], ['oignons-frits', 'Oignons frits', '', 'epicerie'],
     ],
   },
@@ -85,7 +85,7 @@ const DEFAULT_RECIPES = [
     id: 'spaghetti-bolognaise', name: 'Spaghetti bolognaise', category: 'feculents', description: 'La sauce maison de la semaine',
     ingredients: [
       ['spaghetti', 'Spaghetti', '', 'epicerie'], ['viande-hachee', 'Viande hachée', '', 'viande'],
-      ['poivrons-oignons', 'Mélange poivrons & oignons', '', 'surgeles'], ['sauce-tomate', 'Sauce tomate', '', 'epicerie'],
+      ['poivrons-oignons', 'Mélange poivrons & oignons', '', 'fruits'], ['sauce-tomate', 'Sauce tomate', '', 'epicerie'],
       ['fromage-rape', 'Fromage râpé', '', 'frais'],
     ],
   },
@@ -100,7 +100,7 @@ const DEFAULT_RECIPES = [
     id: 'yakisoba-boeuf', name: 'Yakisoba au bœuf', category: 'feculents', description: 'Nouilles sautées, sauce soja et huître',
     ingredients: [
       ['nouilles', 'Nouilles', '', 'epicerie'], ['boeuf', 'Bœuf (fricandó)', '', 'viande'],
-      ['poivrons-oignons', 'Mélange poivrons & oignons', '', 'surgeles'], ['sauce-soja', 'Sauce soja', '', 'epicerie'],
+      ['poivrons-oignons', 'Mélange poivrons & oignons', '', 'fruits'], ['sauce-soja', 'Sauce soja', '', 'epicerie'],
       ['sauce-huitre', 'Sauce huître', '', 'epicerie'],
     ],
   },
@@ -547,5 +547,5 @@ renderShoppingList();
 setView(state.activeView);
 
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => {}));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => { }));
 }
