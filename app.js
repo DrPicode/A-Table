@@ -148,7 +148,11 @@ function escapeHTML(value) {
 }
 
 function renderFilters() {
-  const choices = [{ id: 'tout', label: 'Tout voir' }, ...CATEGORIES.map(({ id, label }) => ({ id, label }))];
+  const choices = [
+    { id: 'tout', label: 'Tout voir' },
+    ...CATEGORIES.map(({ id, label }) => ({ id, label })),
+    { id: 'vegetarien', label: '<span class="veg-badge" aria-hidden="true">V</span> Végétarien' },
+  ];
   document.querySelector('#category-filters').innerHTML = choices.map(({ id, label }) => `
     <button class="filter-chip ${activeCategory === id ? 'active' : ''}" data-category="${id}" aria-pressed="${activeCategory === id}">${label}</button>
   `).join('');
@@ -170,10 +174,12 @@ function isVegetarian(recipe) {
 }
 
 function renderMeals() {
+  const onlyVegetarian = activeCategory === 'vegetarien';
   const visibleRecipes = getRecipes().filter((recipe) => {
-    const categoryMatches = activeCategory === 'tout' || recipe.category === activeCategory;
+    const categoryMatches = activeCategory === 'tout' || onlyVegetarian || recipe.category === activeCategory;
+    const vegetarianMatches = !onlyVegetarian || isVegetarian(recipe);
     const queryMatches = !searchTerm || `${recipe.name} ${recipe.description} ${ingredientNames(recipe)}`.toLocaleLowerCase('fr').includes(searchTerm);
-    return categoryMatches && queryMatches;
+    return categoryMatches && vegetarianMatches && queryMatches;
   });
   const groups = CATEGORIES.map((category) => ({
     ...category,
@@ -353,6 +359,18 @@ function findIngredientId(name) {
   return key || `ingredient-${Date.now()}`;
 }
 
+function getKnownIngredients() {
+  const map = new Map();
+  for (const recipe of getRecipes()) {
+    for (const [, name, , department] of recipe.ingredients) {
+      const key = slugifyIngredient(name);
+      if (!key || map.has(key)) continue;
+      map.set(key, { name, department: department || 'epicerie' });
+    }
+  }
+  return map;
+}
+
 function addIngredientRow(ingredient = null) {
   const [id = '', name = '', quantity = '', department = 'epicerie'] = ingredient || [];
   const departmentOptions = DEPARTMENTS.map(({ id: departmentId, label }) => `
@@ -360,7 +378,7 @@ function addIngredientRow(ingredient = null) {
   `).join('');
   document.querySelector('#ingredient-rows').insertAdjacentHTML('beforeend', `
     <div class="ingredient-row" data-ingredient-id="${escapeHTML(id)}" data-original-name="${escapeHTML(name)}">
-      <input data-ingredient-name type="text" maxlength="70" required value="${escapeHTML(name)}" placeholder="Ex. Tomates" aria-label="Nom de l’ingrédient" />
+      <input data-ingredient-name type="text" maxlength="70" required list="ingredient-suggestions" autocomplete="off" value="${escapeHTML(name)}" placeholder="Ex. Tomates" aria-label="Nom de l’ingrédient" />
       <input data-ingredient-quantity type="text" maxlength="40" value="${escapeHTML(quantity)}" placeholder="Ex. 2 pièces" aria-label="Quantité" />
       <select data-ingredient-department aria-label="Rayon">${departmentOptions}</select>
       <button class="remove-ingredient" type="button" aria-label="Supprimer cet ingrédient" title="Supprimer">×</button>
@@ -384,6 +402,8 @@ function openRecipeDialog(recipeId = '') {
   `).join('');
   document.querySelector('#recipe-description').value = recipe?.description || '';
   document.querySelector('#recipe-note').value = recipe?.note || '';
+  const suggestions = [...getKnownIngredients().values()].sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+  document.querySelector('#ingredient-suggestions').innerHTML = suggestions.map(({ name }) => `<option value="${escapeHTML(name)}"></option>`).join('');
   document.querySelector('#ingredient-rows').innerHTML = '';
   if (recipe?.ingredients.length) recipe.ingredients.forEach(addIngredientRow);
   else addIngredientRow();
@@ -501,6 +521,12 @@ document.querySelector('#add-ingredient').addEventListener('click', () => {
 document.querySelector('#ingredient-rows').addEventListener('click', (event) => {
   const button = event.target.closest('.remove-ingredient');
   if (button) button.closest('.ingredient-row').remove();
+});
+document.querySelector('#ingredient-rows').addEventListener('change', (event) => {
+  const nameInput = event.target.closest('[data-ingredient-name]');
+  if (!nameInput) return;
+  const match = getKnownIngredients().get(slugifyIngredient(nameInput.value));
+  if (match) nameInput.closest('.ingredient-row').querySelector('[data-ingredient-department]').value = match.department;
 });
 document.querySelector('#recipe-dialog').addEventListener('click', (event) => {
   if (event.target === event.currentTarget) event.currentTarget.close();
