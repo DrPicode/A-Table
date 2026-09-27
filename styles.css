@@ -657,6 +657,15 @@ h2 {
   color: #a65044;
 }
 
+.meal-card-actions button[data-open-link] {
+  color: var(--green-dark);
+}
+
+.meal-card-actions button[data-open-link]:hover {
+  background: #e7f0e5;
+  color: var(--green-dark);
+}
+
 .empty-state {
   display: flex;
   flex-direction: column;

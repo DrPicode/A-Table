@@ -147,6 +147,11 @@ function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
 }
 
+function extractUrl(value) {
+  const match = String(value || '').match(/https?:\/\/[^\s]+/i);
+  return match ? match[0] : '';
+}
+
 function renderFilters() {
   const choices = [
     { id: 'tout', label: 'Tout voir' },
@@ -163,7 +168,7 @@ function ingredientNames(recipe) {
 }
 
 const MEAT_DEPARTMENTS = new Set(['viande']);
-const MEAT_KEYWORDS = ['viande', 'poulet', 'boeuf', 'bœuf', 'porc', 'jambon', 'lardon', 'bacon', 'saucisse', 'dinde', 'agneau', 'veau', 'canard', 'chair à saucisse'];
+const MEAT_KEYWORDS = ['viande', 'poulet', 'boeuf', 'bœuf', 'porc', 'jambon', 'lardon', 'bacon', 'saucisse', 'dinde', 'agneau', 'veau', 'canard', 'chair à saucisse', 'chorizo'];
 
 function isVegetarian(recipe) {
   return !recipe.ingredients.some(([, name, , department]) => {
@@ -200,6 +205,8 @@ function renderMealCard(recipe) {
   const ingredientPreview = recipe.ingredients.slice(0, 4).map(([, name]) => `<span class="ingredient-tag">${escapeHTML(name)}</span>`).join('');
   const more = recipe.ingredients.length > 4 ? `<span class="ingredient-tag more">+${recipe.ingredients.length - 4}</span>` : '';
   const note = recipe.note ? `<p class="meal-note"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M8 7v4m0-6h.01"/></svg>${escapeHTML(recipe.note)}</p>` : '';
+  const noteUrl = extractUrl(recipe.note);
+  const openLinkButton = noteUrl ? `<button type="button" data-open-link="${escapeHTML(noteUrl)}" aria-label="Ouvrir le lien de ${escapeHTML(recipe.name)}">Ouvrir lien</button>` : '';
   const vegetarianBadge = isVegetarian(recipe) ? '<span class="veg-badge" title="Plat végétarien" aria-label="Plat végétarien">V</span>' : '';
   return `
     <article class="meal-card ${selected ? 'selected' : ''}">
@@ -211,6 +218,7 @@ function renderMealCard(recipe) {
       <p class="meal-description">${escapeHTML(recipe.description)}</p>
       <div class="ingredient-preview">${ingredientPreview}${more}</div>${note}
       <div class="meal-card-actions">
+        ${openLinkButton}
         <button type="button" data-edit-meal="${escapeHTML(recipe.id)}" aria-label="Modifier ${escapeHTML(recipe.name)}">Modifier</button>
         <button type="button" data-delete-meal="${escapeHTML(recipe.id)}" aria-label="Supprimer ${escapeHTML(recipe.name)}">Supprimer</button>
       </div>
@@ -503,6 +511,8 @@ document.querySelector('#category-filters').addEventListener('click', (event) =>
 document.querySelector('#meal-groups').addEventListener('click', (event) => {
   const selectButton = event.target.closest('[data-toggle-meal]');
   if (selectButton) return toggleRecipe(selectButton.dataset.toggleMeal);
+  const openLinkButton = event.target.closest('[data-open-link]');
+  if (openLinkButton) return window.open(openLinkButton.dataset.openLink, '_blank', 'noopener');
   const editButton = event.target.closest('[data-edit-meal]');
   if (editButton) return openRecipeDialog(editButton.dataset.editMeal);
   const deleteButton = event.target.closest('[data-delete-meal]');
