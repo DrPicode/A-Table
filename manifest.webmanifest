@@ -1,0 +1,15 @@
+{
+  "name": "À table cette semaine",
+  "short_name": "À table",
+  "description": "Choisis tes plats et prépare ta liste de courses de la semaine.",
+  "lang": "fr-FR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f6f7f1",
+  "theme_color": "#f6f7f1",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
