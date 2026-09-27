@@ -1480,11 +1480,15 @@ h2 {
   }
 
   .add-item-controls input {
-    flex: 1 1 100%;
+    flex: 1 1 auto;
   }
 
   .add-item-controls select {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
+  }
+
+  .add-item-controls button {
+    flex: 1 1 100%;
   }
 
   .footer {
