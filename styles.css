@@ -1225,7 +1225,7 @@ h2 {
   }
 
   .meal-description {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .ingredient-tag {
@@ -1335,17 +1335,17 @@ h2 {
 
   .view-tab {
     gap: 7px;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .tab-number {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .tab-count {
     min-width: 18px;
     height: 18px;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .view-panel {
@@ -1389,8 +1389,8 @@ h2 {
   }
 
   .filter-chip {
-    padding: 7px 11px;
-    font-size: 11px;
+    padding: 8px 13px;
+    font-size: 13px;
   }
 
   .meal-groups {
@@ -1539,7 +1539,7 @@ h2 {
 
   .view-tab {
     gap: 5px;
-    font-size: 11px;
+    font-size: 13px;
   }
 
   .tab-number {
