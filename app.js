@@ -558,16 +558,24 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
 
 function showAppVersion() {
   const el = document.querySelector('#app-version');
-  if (!el || !('serviceWorker' in navigator)) return;
+  if (!el) return;
+  const fallback = () => fetch('./service-worker.js', { cache: 'no-store' })
+    .then((response) => response.text())
+    .then((text) => {
+      const match = text.match(/a-table-(v[\w.-]+)/);
+      if (match) el.textContent = match[1];
+    })
+    .catch(() => { });
+  if (!('serviceWorker' in navigator)) return void fallback();
   navigator.serviceWorker.ready.then((registration) => {
     const worker = registration.active;
-    if (!worker) return;
+    if (!worker) return fallback();
     const channel = new MessageChannel();
     channel.port1.onmessage = (event) => {
       if (event.data) el.textContent = event.data;
     };
     worker.postMessage('version', [channel.port2]);
-  }).catch(() => { });
+  }).catch(fallback);
 }
 
 showAppVersion();
