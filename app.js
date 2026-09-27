@@ -104,12 +104,6 @@ const DEFAULT_RECIPES = [
       ['sauce-huitre', 'Sauce huître', '', 'epicerie'],
     ],
   },
-  {
-    id: 'plat-test-temporaire', name: '🧪 Plat test', category: 'salades', description: 'Plat de test — sera retiré au prochain push',
-    ingredients: [
-      ['ingredient-test', 'Ingrédient test', '', 'epicerie'],
-    ],
-  },
 ];
 
 const STORAGE_KEY = 'a-table-cette-semaine-v1';
