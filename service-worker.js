@@ -1,4 +1,5 @@
-const CACHE_NAME = 'a-table-v12';
+const CACHE_NAME = 'a-table-v13';
+const APP_VERSION = CACHE_NAME.replace('a-table-', '');
 const APP_FILES = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', (event) => {
@@ -9,6 +10,10 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))));
   self.clients.claim();
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data === 'version' && event.ports[0]) event.ports[0].postMessage(APP_VERSION);
 });
 
 self.addEventListener('fetch', (event) => {

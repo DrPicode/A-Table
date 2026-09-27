@@ -991,6 +991,12 @@ h2 {
   color: #cf8f75;
 }
 
+.app-version {
+  opacity: .7;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .04em;
+}
+
 .toast {
   position: fixed;
   z-index: 5;

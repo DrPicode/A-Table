@@ -555,3 +555,19 @@ setView(state.activeView);
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => { }));
 }
+
+function showAppVersion() {
+  const el = document.querySelector('#app-version');
+  if (!el || !('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.ready.then((registration) => {
+    const worker = registration.active;
+    if (!worker) return;
+    const channel = new MessageChannel();
+    channel.port1.onmessage = (event) => {
+      if (event.data) el.textContent = event.data;
+    };
+    worker.postMessage('version', [channel.port2]);
+  }).catch(() => { });
+}
+
+showAppVersion();
