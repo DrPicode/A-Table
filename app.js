@@ -158,6 +158,17 @@ function ingredientNames(recipe) {
   return recipe.ingredients.map(([, name]) => name).join(' ').toLocaleLowerCase('fr');
 }
 
+const MEAT_DEPARTMENTS = new Set(['viande']);
+const MEAT_KEYWORDS = ['viande', 'poulet', 'boeuf', 'bœuf', 'porc', 'jambon', 'lardon', 'bacon', 'saucisse', 'dinde', 'agneau', 'veau', 'canard', 'chair à saucisse'];
+
+function isVegetarian(recipe) {
+  return !recipe.ingredients.some(([, name, , department]) => {
+    if (MEAT_DEPARTMENTS.has(department)) return true;
+    const label = String(name).toLocaleLowerCase('fr');
+    return MEAT_KEYWORDS.some((keyword) => label.includes(keyword));
+  });
+}
+
 function renderMeals() {
   const visibleRecipes = getRecipes().filter((recipe) => {
     const categoryMatches = activeCategory === 'tout' || recipe.category === activeCategory;
@@ -183,9 +194,10 @@ function renderMealCard(recipe) {
   const ingredientPreview = recipe.ingredients.slice(0, 4).map(([, name]) => `<span class="ingredient-tag">${escapeHTML(name)}</span>`).join('');
   const more = recipe.ingredients.length > 4 ? `<span class="ingredient-tag more">+${recipe.ingredients.length - 4}</span>` : '';
   const note = recipe.note ? `<p class="meal-note"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M8 7v4m0-6h.01"/></svg>${escapeHTML(recipe.note)}</p>` : '';
+  const vegetarianBadge = isVegetarian(recipe) ? '<span class="veg-badge" title="Plat végétarien" aria-label="Plat végétarien">V</span>' : '';
   return `
     <article class="meal-card ${selected ? 'selected' : ''}">
-      <div class="meal-card-top"><h3 class="meal-name">${escapeHTML(recipe.name)}</h3>
+      <div class="meal-card-top"><div class="meal-name-wrap"><h3 class="meal-name">${escapeHTML(recipe.name)}</h3>${vegetarianBadge}</div>
         <button class="meal-select" data-toggle-meal="${recipe.id}" aria-label="${selected ? 'Retirer' : 'Ajouter'} ${escapeHTML(recipe.name)} ${selected ? 'du menu' : 'au menu'}" aria-pressed="${selected}">
           <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8 3.2 3.2L13 4.8"/></svg>
         </button>
